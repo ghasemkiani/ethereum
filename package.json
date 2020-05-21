@@ -1,0 +1,31 @@
+{
+  "name": "@ghasemkiani/ethereum",
+  "version": "1.0.0",
+  "description": "Ethereum blockchain utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/ghasemkiani/ethereum.git"
+  },
+  "keywords": [
+    "javascript",
+    "nodejs",
+    "blockchain",
+    "ethereum",
+    "cryptocurrency"
+  ],
+  "author": "Ghasem Kiani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://gitlab.com/ghasemkiani/ethereum/issues"
+  },
+  "homepage": "https://gitlab.com/ghasemkiani/ethereum#readme",
+  "dependencies": {
+    "@ghasemkiani/commonbase": "github:ghasemkiani/commonbase",
+    "bignumber.js": "^9.0.0",
+    "web3": "^1.2.8"
+  }
+}

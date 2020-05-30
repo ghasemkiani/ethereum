@@ -54,12 +54,29 @@ class Account extends Base {
 			return balance;
 		}
 	}
+	async toTransfer({amount, to}) {
+		let web3 = ethutil.web3;
+		let privateKey = this.key;
+		return await ethutil.toTransfer({amount, to, privateKey});
+	}
+	async toTransferToken({amount, token, to}) {
+		if(token === "ETH") {
+			return await this.toTransfer({amount, to});
+		} else {
+			let web3 = ethutil.web3;
+			let privateKey = this.key;
+			let tokenAddress = ethutil.contracts[token];
+			if(!tokenAddress) {
+				throw new Error(`Token '${token}' not found (contract address not defined)`);
+			}
+			return await ethutil.toTransferToken({amount, tokenAddress, to, privateKey});
+		}
+	}
 }
 cutil.extend(Account.prototype, {
 	_address: null,
 	key: null,
 	_balances: null,
-	balance: 0,
 });
 
 module.exports = {Account};

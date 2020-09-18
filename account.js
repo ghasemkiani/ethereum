@@ -8,7 +8,7 @@ const {util: ethutil} = require("@ghasemkiani/ethereum/util");
 class Account extends Base {
 	get util() {
 		if(!this._util) {
-			this._util = ethutil;
+			this._util = this.defutil;
 		}
 		return this._util;
 	}
@@ -83,6 +83,7 @@ class Account extends Base {
 	}
 }
 cutil.extend(Account.prototype, {
+	defutil: ethutil,
 	tok: "ETH",
 	_util: null,
 	_address: null,

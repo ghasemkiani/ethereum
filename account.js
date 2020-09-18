@@ -6,9 +6,18 @@ const {Base} = require("@ghasemkiani/commonbase/base");
 const {util: ethutil} = require("@ghasemkiani/ethereum/util");
 
 class Account extends Base {
+	get util() {
+		if(!this._util) {
+			this._util = ethutil;
+		}
+		return this._util;
+	}
+	set util(util) {
+		this._util = util;
+	}
 	get address() {
 		if(!this._address && this.key) {
-			let web3 = ethutil.web3;
+			let web3 = this.util.web3;
 			let privateKey = this.key;
 			this._address = web3.eth.accounts.privateKeyToAccount(privateKey).address;
 		}
@@ -27,53 +36,55 @@ class Account extends Base {
 		this._balances = balances;
 	}
 	get balance() {
-		return this.balances["ETH"];
+		return this.balances[this.tok];
 	}
 	set balance(balance) {
-		this.balances["ETH"] = balance;
+		this.balances[this.tok] = balance;
 	}
 	async toGetBalance() {
-		let web3 = ethutil.web3;
+		let web3 = this.util.web3;
 		let walletAddress = this.address;
-		let balance = await ethutil.toGetBalance(walletAddress);
+		let balance = await this.util.toGetBalance(walletAddress);
 		this.balance = balance;
 		return balance;
 	}
 	async toGetTokenBalance(token) {
-		if(token === "ETH") {
+		if(token === this.tok) {
 			return await this.toGetBalance();
 		} else {
-			let web3 = ethutil.web3;
+			let web3 = this.util.web3;
 			let walletAddress = this.address;
-			let tokenAddress = ethutil.contracts[token];
+			let tokenAddress = this.util.contracts[token];
 			if(!tokenAddress) {
 				throw new Error(`Token '${token}' not found (contract address not defined)`);
 			}
-			let balance = await ethutil.toGetTokenBalanace(walletAddress, tokenAddress);
+			let balance = await this.util.toGetTokenBalanace(walletAddress, tokenAddress);
 			this.balances[token] = balance;
 			return balance;
 		}
 	}
-	async toTransfer({amount, to}) {
-		let web3 = ethutil.web3;
+	async toTransfer({amount, toAddress}) {
+		let web3 = this.util.web3;
 		let privateKey = this.key;
-		return await ethutil.toTransfer({amount, to, privateKey});
+		return await this.util.toTransfer({amount, toAddress, privateKey});
 	}
-	async toTransferToken({amount, token, to}) {
-		if(token === "ETH") {
-			return await this.toTransfer({amount, to});
+	async toTransferToken({amount, token, toAddress}) {
+		if(token === this.tok) {
+			return await this.toTransfer({amount, toAddress});
 		} else {
-			let web3 = ethutil.web3;
+			let web3 = this.util.web3;
 			let privateKey = this.key;
-			let tokenAddress = ethutil.contracts[token];
+			let tokenAddress = this.util.contracts[token];
 			if(!tokenAddress) {
 				throw new Error(`Token '${token}' not found (contract address not defined)`);
 			}
-			return await ethutil.toTransferToken({amount, tokenAddress, to, privateKey});
+			return await this.util.toTransferToken({amount, tokenAddress, toAddress, privateKey});
 		}
 	}
 }
 cutil.extend(Account.prototype, {
+	tok: "ETH",
+	_util: null,
 	_address: null,
 	key: null,
 	_balances: null,

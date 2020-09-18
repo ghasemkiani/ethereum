@@ -36,7 +36,7 @@ class Util extends Base {
 		let gasLimit = (await web3.eth.getBlock("latest")).gasLimit;
 		gasLimit = cutil.asNumber(gasLimit);
 		if(gasLimit > 50_000) {
-			gasLimit = 21_000;
+			gasLimit = 50_000;
 		}
 		this.gasLimit = gasLimit;
 		return gasLimit;
@@ -68,7 +68,6 @@ class Util extends Base {
 		let contract = new web3.eth.Contract(abi, tokenAddress);
 		let decimals = await (contract.methods.decimals()).call();
 		let balance = await (contract.methods.balanceOf(walletAddress)).call();
-		// balance = Number(balance) * (10 ** (-decimals));
 		balance = BigNumber(balance).times(BigNumber(10).pow(-decimals)).toNumber();
 		return balance;
 	}
@@ -78,7 +77,7 @@ class Util extends Base {
 		let fee = gasPrice * gas;
 		return {gas, gasPrice, fee};
 	}
-	async toTransfer({amount, to, privateKey}) {
+	async toTransfer({amount, toAddress, privateKey}) {
 		let web3 = this.web3;
 		if(cutil.isNil(this.gasPrice)) {
 			await this.toGetGasPrice();
@@ -86,13 +85,15 @@ class Util extends Base {
 		let gasPrice = this.gasPrice;
 		let gas = await this.toGetGasLimit();
 		let value = Web3.utils.toWei(cutil.asString(amount), "ether");
+		let to = toAddress;
 		let options = {to, value, gas, gasPrice};
 		let signed = await web3.eth.accounts.signTransaction(options, privateKey);
 		let receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
 		return receipt;
 	}
-	async toTransferToken({amount, tokenAddress, to, privateKey}) {
+	async toTransferToken({amount, tokenAddress, toAddress, privateKey}) {
 		let web3 = this.web3;
+		
 		let abi = [{
 				"constant": true,
 				"inputs": [],
@@ -104,8 +105,8 @@ class Util extends Base {
 			}, {
 				"constant": false,
 				"inputs": [
-					{"name": "to", "type": "address"},
-					{"name": "value", "type": "uint256"},
+					{"name": "_to", "type": "address"},
+					{"name": "_value", "type": "uint256"},
 				],
 				"name": "transfer",
 				"outputs": [{"name": "", "type": "bool"}],
@@ -114,28 +115,23 @@ class Util extends Base {
 				"type": "function"
 			}
 		];
+		
 		let contract = new web3.eth.Contract(abi, tokenAddress);
 		let decimals = await (contract.methods.decimals()).call();
 		amount = BigNumber(amount).times(BigNumber(10).pow(decimals)).toString();
-		let method = contract.methods.transfer(to, amount);
-		let tx = await method.call();
-		console.log(`tx: ${tx.toString()}`);
+		let data = contract.methods.transfer(toAddress, amount).encodeABI();
 		let value = 0; // ETH
-		console.log({to, _address: tx._parent._address, compare: (to === tx._parent._address)});
-		to = tx._parent._address;
+		let to = tokenAddress;
 		if(cutil.isNil(this.gasPrice)) {
 			await this.toGetGasPrice();
 		}
 		let gasPrice = this.gasPrice;
-		let gas = await this.toGetGasLimit();
-		let data = tx.encodeABI();
-		let options = {
-			value,
-			to,
-			data,
-			gas,
-			gasPrice,
-		};
+		if(cutil.isNil(this.gasLimit)) {
+			await this.toGetGasLimit();
+		}
+		let gas = this.gasLimit;
+		console.log({to, value, data, gas, gasPrice});
+		let options = {to, value, data, gas, gasPrice};
 		let signed = await web3.eth.accounts.signTransaction(options, privateKey);
 		let receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
 		return receipt;
@@ -168,6 +164,8 @@ cutil.extend(Util.prototype, {
 		"BCHBULL": "0x4c133e081dfb5858e39cca74e69bf603d409e57a",
 		"LTCBEAR": "0xb422e605fbd765b80d2c4b5d8196c2f94144438b",
 		"LTCBULL": "0xdb61354e9cf2217a29770e9811832b360a8daad3",
+		"BVOL": "0x81824663353a9d29b01b2de9dd9a2bb271d298cd",
+		"IBVOL": "0x627e2ee3dbda546e168eaaff25a2c5212e4a95a0",
 	},
 	gasPrice: null,
 	gasLimit: null,
@@ -176,129 +174,3 @@ cutil.extend(Util.prototype, {
 const util = new Util();
 
 module.exports = {Util, util};
-
-
-/*
-		let abi = [{
-				"constant": true,
-				"inputs": [],
-				"name": "name",
-				"outputs": [{"name": "", "type": "string"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"constant": true,
-				"inputs": [],
-				"name": "totalSupply",
-				"outputs": [{"name": "", "type": "uint256"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"constant": true,
-				"inputs": [],
-				"name": "decimals",
-				"outputs": [{"name": "", "type": "uint8"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"constant": true,
-				"inputs": [],
-				"name": "standard",
-				"outputs": [{"name": "", "type": "string"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"constant": true,
-				"inputs": [{"name": "", "type": "address"}],
-				"name": "balanceOf",
-				"outputs": [{"name": "", "type": "uint256"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"constant": true,
-				"inputs": [],
-				"name": "symbol",
-				"outputs": [{"name": "", "type": "string"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"constant": true,
-				"inputs": [
-					{"name": "", "type": "address"},
-					{"name": "", "type": "address"},
-				],
-				"name": "allowance",
-				"outputs": [{"name": "", "type": "uint256"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"inputs": [
-					{"name": "_name", "type": "string"},
-					{"name": "_symbol", "type": "string"},
-					{"name": "_decimals", "type": "uint8"},
-				],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			}, {
-				"anonymous": false,
-				"inputs": [
-					{"indexed": true, "name": "_from", "type": "address"},
-					{"indexed": true, "name": "_to", "type": "address"},
-					{"indexed": false, "name": "_value", "type": "uint256"},
-				],
-				"name": "Transfer",
-				"type": "event"
-			}, {
-				"anonymous": false,
-				"inputs": [
-					{"indexed": true, "name": "_owner", "type": "address"},
-					{"indexed": true, "name": "_spender", "type": "address"},
-					{"indexed": false, "name": "_value", "type": "uint256"},
-				],
-				"name": "Approval",
-				"type": "event",
-			}, {
-				"constant": false,
-				"inputs": [
-					{"name": "_to", "type": "address"},
-					{"name": "_value", "type": "uint256"},
-				],
-				"name": "transfer",
-				"outputs": [{"name": "success", "type": "bool"}],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			}, {
-				"constant": false,
-				"inputs": [
-					{"name": "_from", "type": "address"},
-					{"name": "_to", "type": "address"},
-					{"name": "_value", "type": "uint256"},
-				],
-				"name": "transferFrom",
-				"outputs": [{"name": "success", "type": "bool"}],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			}, {
-				"constant": false,
-				"inputs": [
-					{"name": "_spender", "type": "address"},
-					{"name": "_value", "type": "uint256"},
-				],
-				"name": "approve",
-				"outputs": [{"name": "success", "type": "bool"}],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			}
-		];
-*/

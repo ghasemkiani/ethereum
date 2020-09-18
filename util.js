@@ -9,7 +9,7 @@ const {Base} = require("@ghasemkiani/commonbase/base");
 class Util extends Base {
 	get url() {
 		if(!this._url) {
-			this._url = process.env.[this.NODE_KEY] || this.DEFAULT_URL;
+			this._url = process.env[this.NODE_KEY] || this.DEFAULT_URL;
 		}
 		return this._url;
 	}

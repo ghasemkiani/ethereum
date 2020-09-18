@@ -139,7 +139,7 @@ class Util extends Base {
 }
 cutil.extend(Util.prototype, {
 	DEFAULT_URL: null,
-	NODE_KEY: "ETH_NODE"
+	NODE_KEY: "ETH_NODE",
 	_url: null,
 	contracts: {
 		"USDT": "0xdac17f958d2ee523a2206206994597c13d831ec7",

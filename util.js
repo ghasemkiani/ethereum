@@ -9,7 +9,7 @@ const {Base} = require("@ghasemkiani/commonbase/base");
 class Util extends Base {
 	get url() {
 		if(!this._url) {
-			this._url = process.env.ETH_NODE || this.DEFAULT_URL;
+			this._url = process.env.[this.NODE_KEY] || this.DEFAULT_URL;
 		}
 		return this._url;
 	}
@@ -139,6 +139,7 @@ class Util extends Base {
 }
 cutil.extend(Util.prototype, {
 	DEFAULT_URL: null,
+	NODE_KEY: "ETH_NODE"
 	_url: null,
 	contracts: {
 		"USDT": "0xdac17f958d2ee523a2206206994597c13d831ec7",

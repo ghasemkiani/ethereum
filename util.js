@@ -5,6 +5,7 @@ const BigNumber = require("bignumber.js");
 
 const {cutil} = require("@ghasemkiani/commonbase/cutil");
 const {Base} = require("@ghasemkiani/commonbase/base");
+const {abi: abiERC20} = require("@ghasemkiani/ethereum/ERC20");
 
 class Util extends Base {
 	get url() {
@@ -49,22 +50,7 @@ class Util extends Base {
 	}
 	async toGetTokenBalanace(walletAddress, tokenAddress) {
 		let web3 = this.web3;
-		let abi = [
-			{
-				"constant": true,
-				"inputs": [{"name": "_owner", "type": "address"}],
-				"name": "balanceOf",
-				"outputs": [{"name": "balance", "type": "uint256"}],
-				"type": "function"
-			},
-			{
-				"constant": true,
-				"inputs": [],
-				"name": "decimals",
-				"outputs": [{"name": "", "type": "uint8"}],
-				"type": "function"
-			}
-		];
+		let abi = abiERC20;
 		let contract = new web3.eth.Contract(abi, tokenAddress);
 		let decimals = await (contract.methods.decimals()).call();
 		let balance = await (contract.methods.balanceOf(walletAddress)).call();
@@ -93,29 +79,7 @@ class Util extends Base {
 	}
 	async toTransferToken({amount, tokenAddress, toAddress, privateKey}) {
 		let web3 = this.web3;
-		
-		let abi = [{
-				"constant": true,
-				"inputs": [],
-				"name": "decimals",
-				"outputs": [{"name": "", "type": "uint8"}],
-				"payable": false,
-				"stateMutability": "view",
-				"type": "function"
-			}, {
-				"constant": false,
-				"inputs": [
-					{"name": "_to", "type": "address"},
-					{"name": "_value", "type": "uint256"},
-				],
-				"name": "transfer",
-				"outputs": [{"name": "", "type": "bool"}],
-				"payable": false,
-				"stateMutability": "nonpayable",
-				"type": "function"
-			}
-		];
-		
+		let abi = abiERC20;
 		let contract = new web3.eth.Contract(abi, tokenAddress);
 		let decimals = await (contract.methods.decimals()).call();
 		amount = BigNumber(amount).times(BigNumber(10).pow(decimals)).toString();

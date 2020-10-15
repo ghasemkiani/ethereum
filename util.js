@@ -5,7 +5,7 @@ const BigNumber = require("bignumber.js");
 
 const {cutil} = require("@ghasemkiani/commonbase/cutil");
 const {Base} = require("@ghasemkiani/commonbase/base");
-const {abi: abiERC20} = require("@ghasemkiani/ethereum/ERC20");
+const {abi: abiERC20} = require("@ghasemkiani/ethereum/erc20");
 
 class Util extends Base {
 	get url() {

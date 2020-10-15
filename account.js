@@ -1,20 +1,14 @@
+//	@ghasemkiani/ethereum/account
+
 const Web3 = require("web3");
 const BigNumber = require("bignumber.js");
 
 const {cutil} = require("@ghasemkiani/commonbase/cutil");
 const {Base} = require("@ghasemkiani/commonbase/base");
-const {util: ethutil} = require("@ghasemkiani/ethereum/util");
+const {iwutil} = require("@ghasemkiani/ethereum/iwutil");
+const {util: utilEth} = require("@ghasemkiani/ethereum/util");
 
-class Account extends Base {
-	get util() {
-		if(!this._util) {
-			this._util = this.defutil;
-		}
-		return this._util;
-	}
-	set util(util) {
-		this._util = util;
-	}
+class Account extends cutil.mixin(Base, iwutil) {
 	get address() {
 		if(!this._address && this.key) {
 			let web3 = this.util.web3;
@@ -83,9 +77,8 @@ class Account extends Base {
 	}
 }
 cutil.extend(Account.prototype, {
-	defutil: ethutil,
+	defutil: utilEth,
 	tok: "ETH",
-	_util: null,
 	_address: null,
 	key: null,
 	_balances: null,

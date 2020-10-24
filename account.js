@@ -7,8 +7,10 @@ const {cutil} = require("@ghasemkiani/commonbase/cutil");
 const {Base} = require("@ghasemkiani/commonbase/base");
 const {iwutil} = require("@ghasemkiani/ethereum/iwutil");
 const {util: utilEth} = require("@ghasemkiani/ethereum/util");
+const {Client} = require("@ghasemkiani/etherscan-api/client");
+const {iwscan} = require("@ghasemkiani/ethereum/iwscan");
 
-class Account extends cutil.mixin(Base, iwutil) {
+class Account extends cutil.mixin(Base, iwutil, iwscan) {
 	get address() {
 		if(!this._address && this.key) {
 			let web3 = this.util.web3;
@@ -78,6 +80,7 @@ class Account extends cutil.mixin(Base, iwutil) {
 }
 cutil.extend(Account.prototype, {
 	defutil: utilEth,
+	defScan: Client,
 	tok: "ETH",
 	_address: null,
 	key: null,

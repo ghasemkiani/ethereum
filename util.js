@@ -36,8 +36,8 @@ class Util extends Base {
 		let web3 = this.web3;
 		let gasLimit = (await web3.eth.getBlock("latest")).gasLimit;
 		gasLimit = cutil.asNumber(gasLimit);
-		if(gasLimit > 50_000) {
-			gasLimit = 50_000;
+		if(gasLimit > 500_000) {
+			gasLimit = 500_000;
 		}
 		this.gasLimit = gasLimit;
 		return gasLimit;
@@ -102,6 +102,7 @@ class Util extends Base {
 	}
 }
 cutil.extend(Util.prototype, {
+	tok: "ETH",
 	DEFAULT_URL: null,
 	NODE_KEY: "ETH_NODE",
 	_url: null,

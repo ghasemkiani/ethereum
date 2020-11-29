@@ -1,4 +1,5 @@
 //	@ghasemkiani/ethereum/icontract
+const {cutil} = require("@ghasemkiani/commonbase/cutil");
 
 const icontract = {
 	abi: null,
@@ -20,6 +21,22 @@ const icontract = {
 	set contract(contract) {
 		this._contract = contract;
 	},
+	account: null,
+	async toSendData(data, value = 0) {
+		let to = this.address;
+		if(cutil.isNil(this.util.gasPrice)) {
+			await this.util.toGetGasPrice();
+		}
+		let gasPrice = this.util.gasPrice;
+		if(cutil.isNil(this.util.gasLimit)) {
+			await this.util.toGetGasLimit();
+		}
+		let gas = this.util.gasLimit;
+		console.log({to, value, gas, gasPrice, data});
+		let options = {to, value, gas, gasPrice, data};
+		let receipt = await this.account.toSend(options);
+		return receipt;
+	}
 };
 
 module.exports = {icontract};

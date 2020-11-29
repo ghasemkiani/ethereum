@@ -32,10 +32,10 @@ class Account extends cutil.mixin(Base, iwutil, iwscan) {
 		this._balances = balances;
 	}
 	get balance() {
-		return this.balances[this.tok];
+		return this.balances[this.util.tok];
 	}
 	set balance(balance) {
-		this.balances[this.tok] = balance;
+		this.balances[this.util.tok] = balance;
 	}
 	async toGetBalance() {
 		let web3 = this.util.web3;
@@ -45,7 +45,7 @@ class Account extends cutil.mixin(Base, iwutil, iwscan) {
 		return balance;
 	}
 	async toGetTokenBalance(token) {
-		if(token === this.tok) {
+		if(token === this.util.tok) {
 			return await this.toGetBalance();
 		} else {
 			let web3 = this.util.web3;
@@ -65,7 +65,7 @@ class Account extends cutil.mixin(Base, iwutil, iwscan) {
 		return await this.util.toTransfer({amount, toAddress, privateKey});
 	}
 	async toTransferToken({amount, token, toAddress}) {
-		if(token === this.tok) {
+		if(token === this.util.tok) {
 			return await this.toTransfer({amount, toAddress});
 		} else {
 			let web3 = this.util.web3;
@@ -77,11 +77,24 @@ class Account extends cutil.mixin(Base, iwutil, iwscan) {
 			return await this.util.toTransferToken({amount, tokenAddress, toAddress, privateKey});
 		}
 	}
+	async toSignTransaction(options) {
+		let privateKey = this.key;
+		let signed = await this.util.web3.eth.accounts.signTransaction(options, privateKey);
+		return signed;
+	}
+	async toSendSignedTransaction(rawTransaction) {
+		let receipt = await this.util.web3.eth.sendSignedTransaction(rawTransaction);
+		return receipt;
+	}
+	async toSend(options) {
+		let signed = await this.toSignTransaction(options);
+		let receipt = await this.toSendSignedTransaction(signed.rawTransaction);
+		return receipt;
+	}
 }
 cutil.extend(Account.prototype, {
 	defutil: utilEth,
 	defScan: Client,
-	tok: "ETH",
 	_address: null,
 	key: null,
 	_balances: null,

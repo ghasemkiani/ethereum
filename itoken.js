@@ -82,6 +82,14 @@ const itoken = {
 		balance = this.unwrapNumber(balance);
 		return balance;
 	},
+	async toGetAccountBalanceBig() {
+		let address = this.account.address;
+		return await this.toGetBalanceOfBig(address);
+	},
+	async toGetAccountBalance() {
+		let address = this.account.address;
+		return await this.toGetBalanceOf(address);
+	},
 	async toTransferBig(to, value) {
 		let data = this.contract.methods.transfer(to, value).encodeABI();
 		let result = await this.toSendData(data);
@@ -94,11 +102,11 @@ const itoken = {
 		return this.toTransferBig(to, value);
 	},
 	async toTransferFromBig(from, to, value) {
-		let data = this.contract.methods.transfer(from, to, value).encodeABI();
+		let data = this.contract.methods.transferFrom(from, to, value).encodeABI();
 		let result = await this.toSendData(data);
 		return result;
 	},
-	async toTransfer(from, to, amount) {
+	async toTransferFrom(from, to, amount) {
 		await this.toGetAbi();
 		await this.toGetDecimals();
 		let value = this.wrapNumber(amount);

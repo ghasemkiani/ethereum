@@ -42,6 +42,10 @@ class Util extends Base {
 		this.gasLimit = gasLimit;
 		return gasLimit;
 	}
+	toWei(amount) {
+		let value = Web3.utils.toWei(cutil.asString(amount), "ether");
+		return value;
+	}
 	async toGetBalance(walletAddress) {
 		let web3 = this.web3;
 		let balance = await web3.eth.getBalance(walletAddress);
@@ -99,6 +103,19 @@ class Util extends Base {
 		let signed = await web3.eth.accounts.signTransaction(options, privateKey);
 		let receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
 		return receipt;
+	}
+	tokenAddress(tokenId) {
+		return this.contracts[tokenId];
+	}
+	tokenId(tokenAddress) {
+		let tokId;
+		for(let k of Object.keys(this.contracts)) {
+			let tokAddress = this.contracts[k];
+			if(tokAddress.toLowerCase() === tokenAddress.toLowerCase()) {
+				tokId = k;
+			}
+		}
+		return tokId;
 	}
 }
 cutil.extend(Util.prototype, {

@@ -4,10 +4,11 @@ const {cutil} = require("@ghasemkiani/commonbase/cutil");
 const icontract = {
 	abi: null,
 	async toGetAbi() {
-		let address = this.address;
-		let abi = await this.scan.toGetContractAbi(address);
-		this.abi = abi;
-		return abi;
+		if(!this.abi) {
+			let address = this.address;
+			this.abi = await this.scan.toGetContractAbi(address);
+		}
+		return this.abi;
 	},
 	_contract: null,
 	get contract() {

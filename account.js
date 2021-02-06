@@ -22,6 +22,10 @@ class Account extends cutil.mixin(Base, iwutil, iwscan) {
 	set address(address) {
 		this._address = address;
 	}
+	toChecksumAddress() {
+		this.address = Web3.utils.toChecksumAddress(this.address);
+		return this;
+	}
 	get balances() {
 		if(!this._balances) {
 			this._balances = {};

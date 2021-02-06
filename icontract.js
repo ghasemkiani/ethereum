@@ -1,4 +1,5 @@
 //	@ghasemkiani/ethereum/icontract
+
 const {cutil} = require("@ghasemkiani/commonbase/cutil");
 
 const icontract = {
@@ -9,6 +10,11 @@ const icontract = {
 			this.abi = await this.scan.toGetContractAbi(address);
 		}
 		return this.abi;
+	},
+	async toRemoveAbiFromCache() {
+		let address = this.address;
+		let result = this.scan.toRemoveContractAbiFromCache(address);
+		return result;
 	},
 	_contract: null,
 	get contract() {

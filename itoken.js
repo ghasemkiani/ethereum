@@ -1,6 +1,6 @@
 //	@ghasemkiani/ethereum/itoken
 
-const BigNumber = require("bignumber.js");
+const {BigNumber} = require("bignumber.js");
 
 const {cutil} = require("@ghasemkiani/commonbase/cutil");
 

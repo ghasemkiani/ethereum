@@ -121,6 +121,9 @@ class Util extends Base {
 		}
 		return tokId;
 	}
+	eq(address1, address2) {
+		return cutil.asString(address1).toLowerCase() === cutil.asString(address2).toLowerCase();
+	}
 }
 cutil.extend(Util.prototype, {
 	tok: "ETH",

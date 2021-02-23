@@ -1,6 +1,6 @@
 {
   "name": "@ghasemkiani/ethereum",
-  "version": "1.8.3",
+  "version": "1.9.0",
   "description": "Ethereum blockchain utility",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,6 @@
     "@ghasemkiani/commonbase": "github:ghasemkiani/commonbase",
     "@ghasemkiani/etherscan-api": "gitlab:ghasemkiani/etherscan-api",
     "bignumber.js": "^9.0.1",
-    "web3": "^1.3.0"
+    "web3": "^1.3.4"
   }
 }

@@ -51,7 +51,7 @@ const itoken = {
 		if(cutil.isNil(decimals)) {
 			throw new Error("Token decimals not fetched!");
 		}
-		return BigNumber(n).times(BigNumber(10).pow(decimals)).idiv(1).toString();
+		return BigNumber(n).times(BigNumber(10).pow(decimals)).idiv(1).toFixed(0);
 	},
 	unwrapNumber(n) {
 		let decimals = this.decimals;

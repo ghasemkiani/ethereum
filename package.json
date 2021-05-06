@@ -1,6 +1,6 @@
 {
   "name": "@ghasemkiani/ethereum",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Ethereum blockchain utility",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/ghasemkiani/ethereum.git"
+    "url": "git+https://github.com/ghasemkiani/ethereum.git"
   },
   "keywords": [
     "javascript",
@@ -20,12 +20,12 @@
   "author": "Ghasem Kiani",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitlab.com/ghasemkiani/ethereum/issues"
+    "url": "https://github.com/ghasemkiani/ethereum/issues"
   },
-  "homepage": "https://gitlab.com/ghasemkiani/ethereum#readme",
+  "homepage": "https://github.com/ghasemkiani/ethereum#readme",
   "dependencies": {
     "@ghasemkiani/base": "github:ghasemkiani/base",
-    "@ghasemkiani/etherscan-api": "gitlab:ghasemkiani/etherscan-api",
+    "@ghasemkiani/etherscan-api": "github:ghasemkiani/etherscan-api",
     "bignumber.js": "^9.0.1",
     "web3": "^1.3.4"
   }

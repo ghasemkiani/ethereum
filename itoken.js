@@ -2,7 +2,7 @@
 
 const {BigNumber} = require("bignumber.js");
 
-const {cutil} = require("@ghasemkiani/commonbase/cutil");
+const {cutil} = require("@ghasemkiani/base/cutil");
 
 const itoken = {
 	id: null,
@@ -41,10 +41,19 @@ const itoken = {
 		return this.name;
 	},
 	async toGetDecimals() {
-		if(cutil.isNil(this.decimals)) {
-			this.decimals = await (this.contract.methods.decimals()).call();
+		try {
+			if(cutil.isNil(this.decimals)) {
+				this.decimals = await (this.contract.methods.decimals()).call();
+			}
+			return this.decimals;
+		} catch(e) {
+			if(this.id in this.util.tokenDecimals) {
+				this.decimals = this.util.tokenDecimals[this.id];
+				return this.decimals;
+			} else {
+				throw e;
+			}
 		}
-		return this.decimals;
 	},
 	wrapNumber(n) {
 		let decimals = this.decimals;
@@ -121,7 +130,7 @@ const itoken = {
 		await this.toGetAbi();
 		await this.toGetDecimals();
 		let value = this.wrapNumber(amount);
-		return this.toApprove(spender, amount);
+		return this.toApproveBig(spender, amount);
 	},
 	async toGetAllowanceBig(owner, spender) {
 		let allowance = await this.contract.methods.allowance(owner, spender).call();

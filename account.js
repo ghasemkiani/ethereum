@@ -3,8 +3,8 @@
 const Web3 = require("web3");
 const BigNumber = require("bignumber.js");
 
-const {cutil} = require("@ghasemkiani/commonbase/cutil");
-const {Base} = require("@ghasemkiani/commonbase/base");
+const {cutil} = require("@ghasemkiani/base/cutil");
+const {Obj: Base} = require("@ghasemkiani/base/obj");
 const {iwutil} = require("@ghasemkiani/ethereum/iwutil");
 const {util: utilEth} = require("@ghasemkiani/ethereum/util");
 const {Client} = require("@ghasemkiani/etherscan-api/client");

@@ -1,6 +1,6 @@
 //	@ghasemkiani/ethereum/contract
 
-const {cutil} = require("@ghasemkiani/commonbase/cutil");
+const {cutil} = require("@ghasemkiani/base/cutil");
 const {Account} = require("@ghasemkiani/ethereum/account");
 const {icontract} = require("@ghasemkiani/ethereum/icontract");
 

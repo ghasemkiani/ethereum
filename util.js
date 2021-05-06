@@ -3,8 +3,8 @@
 const Web3 = require("web3");
 const BigNumber = require("bignumber.js");
 
-const {cutil} = require("@ghasemkiani/commonbase/cutil");
-const {Base} = require("@ghasemkiani/commonbase/base");
+const {cutil} = require("@ghasemkiani/base/cutil");
+const {Obj: Base} = require("@ghasemkiani/base/obj");
 const {abi: abiERC20} = require("@ghasemkiani/ethereum/erc20");
 
 class Util extends Base {
@@ -56,12 +56,19 @@ class Util extends Base {
 		balance = BigNumber(balance).times(BigNumber(10).pow(-18)).toNumber();
 		return balance;
 	}
+	async toGetTokenBalanaceBig(walletAddress, tokenAddress) {
+		let web3 = this.web3;
+		let abi = abiERC20;
+		let contract = new web3.eth.Contract(abi, tokenAddress);
+		let balance = await (contract.methods.balanceOf(walletAddress)).call();
+		return balance;
+	}
 	async toGetTokenBalanace(walletAddress, tokenAddress) {
 		let web3 = this.web3;
 		let abi = abiERC20;
 		let contract = new web3.eth.Contract(abi, tokenAddress);
 		let decimals = await (contract.methods.decimals()).call();
-		let balance = await (contract.methods.balanceOf(walletAddress)).call();
+		let balance = await this.toGetTokenBalanaceBig(walletAddress, tokenAddress);
 		balance = BigNumber(balance).times(BigNumber(10).pow(-decimals)).toNumber();
 		return balance;
 	}
@@ -139,6 +146,7 @@ cutil.extend(Util.prototype, {
 		"BNB": "0xB8c77482e45F1F44dE1745F52C74426C631bDD52",
 		"AWC": "0xaD22f63404f7305e4713CcBd4F296f34770513f4",
 		"LINK": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+		"FTT": "0x50D1c9771902476076eCFc8B2A83Ad6b9355a4c9",
 		"LEO": "0x2AF5D2aD76741191D15Dfe7bF6aC92d4Bd912Ca3",
 		"LPT": "0x58b6A8A3302369DAEc383334672404Ee733aB239",
 		"HT": "0x6f259637dcD74C767781E37Bc6133cd6A68aa161",
@@ -349,6 +357,8 @@ cutil.extend(Util.prototype, {
 		"SAKE": "0x066798d9ef0833ccc719076Dab77199eCbd178b0",
 		"OPEN": "0x69e8b9528CABDA89fe846C67675B5D73d463a916",
 	},
+	tokenDecimals: {},
+	contractProxies: {},
 	gasPrice: null,
 	gasLimit: null,
 });

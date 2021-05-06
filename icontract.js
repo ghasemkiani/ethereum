@@ -1,12 +1,15 @@
 //	@ghasemkiani/ethereum/icontract
 
-const {cutil} = require("@ghasemkiani/commonbase/cutil");
+const {cutil} = require("@ghasemkiani/base/cutil");
 
 const icontract = {
 	abi: null,
 	async toGetAbi() {
 		if(!this.abi) {
 			let address = this.address;
+			if(address in this.util.contractProxies) {
+				address = this.util.contractProxies[address];
+			}
 			this.abi = await this.scan.toGetContractAbi(address);
 		}
 		return this.abi;
@@ -43,7 +46,21 @@ const icontract = {
 		let options = {to, value, gas, gasPrice, data};
 		let receipt = await this.account.toSend(options);
 		return receipt;
-	}
+	},
+	async toCallRead(method, ...rest) {
+		let result = await this.contract.methods[method](...rest).call();
+		return result;
+	},
+	async toCallWriteWithValue(value, method, ...rest) {
+		let data = await this.contract.methods[method](...rest).encodeABI();
+		let result = await this.toSendData(data, value);
+		return result;
+	},
+	async toCallWrite(method, ...rest) {
+		let value = 0;
+		let result = await this.toCallWriteWithValue(value, method, ...rest);
+		return result;
+	},
 };
 
 module.exports = {icontract};

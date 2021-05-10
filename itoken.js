@@ -144,6 +144,16 @@ const itoken = {
 		let allowance = this.unwrapNumber(allowance_);
 		return allowance;
 	},
+	async toGetAccountAllowance_(spender) {
+		let owner = this.account.address;
+		let allowance_ = await this.toGetAllowance_(owner, spender);
+		return allowance_;
+	},
+	async toGetAccountAllowance(spender) {
+		let owner = this.account.address;
+		let allowance = await this.toGetAllowance(owner, spender);
+		return allowance;
+	},
 }
 
 module.exports = {itoken};

@@ -69,78 +69,79 @@ const itoken = {
 		}
 		return BigNumber(n).times(BigNumber(10).pow(-decimals)).toNumber();
 	},
-	async toGetTotalSupplyBig() {
-		let totalSupply = await (this.contract.methods.totalSupply()).call();
-		return totalSupply;
+	async toGetTotalSupply_() {
+		let totalSupply_ = await (this.contract.methods.totalSupply()).call();
+		return totalSupply_;
 	},
 	async toGetTotalSupply() {
 		await this.toGetAbi();
 		await this.toGetDecimals();
-		let totalSupply = await this.toGetTotalSupplyBig();
-		totalSupply = this.unwrapNumber(totalSupply);
+		let totalSupply_ = await this.toGetTotalSupply_();
+		let totalSupply = this.unwrapNumber(totalSupply_);
 		return totalSupply;
 	},
-	async toGetBalanceOfBig(address) {
-		let balance = await (this.contract.methods.balanceOf(address)).call();
-		return balance;
+	async toGetBalanceOf_(address) {
+		let balance_ = await (this.contract.methods.balanceOf(address)).call();
+		return balance_;
 	},
 	async toGetBalanceOf(address) {
 		await this.toGetAbi();
 		await this.toGetDecimals();
-		let balance = await this.toGetBalanceOfBig(address);
-		balance = this.unwrapNumber(balance);
+		let balance_ = await this.toGetBalanceOf_(address);
+		let balance = this.unwrapNumber(balance_);
 		return balance;
 	},
-	async toGetAccountBalanceBig() {
+	async toGetAccountBalance_() {
 		let address = this.account.address;
-		return await this.toGetBalanceOfBig(address);
+		let balance_ = await this.toGetBalanceOf_(address);
+		return balance_;
 	},
 	async toGetAccountBalance() {
 		let address = this.account.address;
 		return await this.toGetBalanceOf(address);
 	},
-	async toTransferBig(to, value) {
-		let data = this.contract.methods.transfer(to, value).encodeABI();
+	async toTransfer_(to, amount_) {
+		let data = this.contract.methods.transfer(to, amount_).encodeABI();
 		let result = await this.toSendData(data);
 		return result;
 	},
 	async toTransfer(to, amount) {
 		await this.toGetAbi();
 		await this.toGetDecimals();
-		let value = this.wrapNumber(amount);
-		return this.toTransferBig(to, value);
+		let amount_ = this.wrapNumber(amount);
+		return this.toTransfer_(to, amount_);
 	},
-	async toTransferFromBig(from, to, value) {
-		let data = this.contract.methods.transferFrom(from, to, value).encodeABI();
+	async toTransferFrom_(from, to, amount_) {
+		let data = this.contract.methods.transferFrom(from, to, amount_).encodeABI();
 		let result = await this.toSendData(data);
 		return result;
 	},
 	async toTransferFrom(from, to, amount) {
 		await this.toGetAbi();
 		await this.toGetDecimals();
-		let value = this.wrapNumber(amount);
-		return this.toTransferFromBig(from, to, value);
+		let amount_ = this.wrapNumber(amount);
+		return this.toTransferFrom_(from, to, amount_);
 	},
-	async toApproveBig(spender, value) {
-		let data = this.contract.methods.approve(spender, value).encodeABI();
+	async toApprove_(spender, amount_) {
+		let data = this.contract.methods.approve(spender, amount_).encodeABI();
 		let result = await this.toSendData(data);
 		return result;
 	},
 	async toApprove(spender, amount) {
 		await this.toGetAbi();
 		await this.toGetDecimals();
-		let value = this.wrapNumber(amount);
-		return this.toApproveBig(spender, amount);
+		let amount_ = this.wrapNumber(amount);
+		return this.toApprove_(spender, amount_);
 	},
-	async toGetAllowanceBig(owner, spender) {
-		let allowance = await this.contract.methods.allowance(owner, spender).call();
-		return allowance;
+	async toGetAllowance_(owner, spender) {
+		let allowance_ = await this.contract.methods.allowance(owner, spender).call();
+		return allowance_;
 	},
 	async toGetAllowance(owner, spender) {
 		await this.toGetAbi();
 		await this.toGetDecimals();
-		let allowance = await this.toGetAllowanceBig(owner, spender);
-		allowance = this.unwrapNumber(allowance);
+		let allowance_ = await this.toGetAllowance_(owner, spender);
+		let allowance = this.unwrapNumber(allowance_);
 		return allowance;
 	},
 }

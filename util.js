@@ -56,20 +56,20 @@ class Util extends Base {
 		balance = BigNumber(balance).times(BigNumber(10).pow(-18)).toNumber();
 		return balance;
 	}
-	async toGetTokenBalanaceBig(walletAddress, tokenAddress) {
+	async toGetTokenBalanace_(walletAddress, tokenAddress) {
 		let web3 = this.web3;
 		let abi = abiERC20;
 		let contract = new web3.eth.Contract(abi, tokenAddress);
-		let balance = await (contract.methods.balanceOf(walletAddress)).call();
-		return balance;
+		let balance_ = await (contract.methods.balanceOf(walletAddress)).call();
+		return balance_;
 	}
 	async toGetTokenBalanace(walletAddress, tokenAddress) {
 		let web3 = this.web3;
 		let abi = abiERC20;
 		let contract = new web3.eth.Contract(abi, tokenAddress);
 		let decimals = await (contract.methods.decimals()).call();
-		let balance = await this.toGetTokenBalanaceBig(walletAddress, tokenAddress);
-		balance = BigNumber(balance).times(BigNumber(10).pow(-decimals)).toNumber();
+		let balance_ = await this.toGetTokenBalanace_(walletAddress, tokenAddress);
+		let balance = BigNumber(balance_).times(BigNumber(10).pow(-decimals)).toNumber();
 		return balance;
 	}
 	async toGetTransactionFee() {

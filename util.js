@@ -120,9 +120,10 @@ class Util extends Base {
 	}
 	tokenId(tokenAddress) {
 		let tokId;
+		tokenAddress = cutil.asString(tokenAddress).toLowerCase();
 		for(let k of Object.keys(this.contracts)) {
 			let tokAddress = this.contracts[k];
-			if(tokAddress.toLowerCase() === tokenAddress.toLowerCase()) {
+			if(tokAddress.toLowerCase() === tokenAddress) {
 				tokId = k;
 			}
 		}
@@ -356,6 +357,8 @@ cutil.extend(Util.prototype, {
 		"YUNO": "0x4B4F5286e0f93E965292B922B9Cd1677512F1222",
 		"SAKE": "0x066798d9ef0833ccc719076Dab77199eCbd178b0",
 		"OPEN": "0x69e8b9528CABDA89fe846C67675B5D73d463a916",
+		"SHIB": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
+		"Uni-v3": "0x4D8df3CD11236Abd95A31De0c68495e5cF3B05a4",
 	},
 	tokenDecimals: {},
 	contractProxies: {},

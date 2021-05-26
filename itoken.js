@@ -3,6 +3,7 @@
 const {BigNumber} = require("bignumber.js");
 
 const {cutil} = require("@ghasemkiani/base/cutil");
+const {abi: abiErc20} = require("@ghasemkiani/ethereum/erc20");
 
 const itoken = {
 	id: null,
@@ -20,6 +21,18 @@ const itoken = {
 	},
 	set address(address) {
 		this._address = address;
+	},
+	fallbackToErc20Abi: true,
+	async toGetAbi() {
+		try {
+			await super.toGetAbi();
+		} catch(e) {
+			if (this.fallbackToErc20Abi) {
+				this.abi = JSON.parse(JSON.stringify(abiErc20));
+			} else {
+				throw e;
+			}
+		}
 	},
 	async toUpdate() {
 		await this.toGetAbi();

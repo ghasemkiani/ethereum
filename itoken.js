@@ -23,9 +23,9 @@ const itoken = {
 		this._address = address;
 	},
 	fallbackToErc20Abi: true,
-	async toGetAbi() {
+	async toUpdate() {
 		try {
-			await super.toGetAbi();
+			await this.toGetAbi();
 		} catch(e) {
 			if (this.fallbackToErc20Abi) {
 				this.abi = JSON.parse(JSON.stringify(abiErc20));
@@ -33,9 +33,6 @@ const itoken = {
 				throw e;
 			}
 		}
-	},
-	async toUpdate() {
-		await this.toGetAbi();
 		await this.toGetSymbol();
 		await this.toGetName();
 		await this.toGetDecimals();

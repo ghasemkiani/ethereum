@@ -50,6 +50,28 @@ class Util extends Base {
 		let value = Web3.utils.toWei(cutil.asString(amount), "ether");
 		return value;
 	}
+	async toGetBlockNumber() {
+		let util = this;
+		let {web3} = util;
+		let blockNumber = await web3.eth.getBlockNumber();
+		return blockNumber;
+	}
+	async toGetBlock(blockNumber) {
+		let util = this;
+		let {web3} = util;
+		let block = await web3.eth.getBlock(blockNumber);
+		return block;
+	}
+	async toGetBlockTimeSec() {
+		let util = this;
+		let {web3} = util;
+		let N = 10000;
+		let currentBlock = await util.toGetBlockNumber();
+		let {timestamp: timestamp1} = await util.toGetBlock(currentBlock);
+		let {timestamp: timestamp0} = await util.toGetBlock(currentBlock - N);
+		let blockTimeSec = (cutil.asNumber(timestamp1) - cutil.asNumber(timestamp0)) / N;
+		return blockTimeSec;
+	}
 	async toGetBalance(walletAddress) {
 		let web3 = this.web3;
 		let balance = await web3.eth.getBalance(walletAddress);
@@ -141,6 +163,7 @@ cutil.extend(Util.prototype, {
 	contracts: {
 		"WETH": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
 		"WBTC": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+		"BBTC": "0x9BE89D2a4cd102D8Fecc6BF9dA793be995C22541",
 		"USDT": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
 		"USDC": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
 		"XAUT": "0x4922a015c4407F87432B179bb209e125432E4a2A",
@@ -359,9 +382,13 @@ cutil.extend(Util.prototype, {
 		"OPEN": "0x69e8b9528CABDA89fe846C67675B5D73d463a916",
 		"SHIB": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
 		"Uni-v3": "0x4D8df3CD11236Abd95A31De0c68495e5cF3B05a4",
+		"GTC": "0xDe30da39c46104798bB5aA3fe8B9e0e1F348163F",
+		"MATIC": "0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0",
 	},
 	tokenDecimals: {},
-	contractProxies: {},
+	contractProxies: {
+		"0x9BE89D2a4cd102D8Fecc6BF9dA793be995C22541": "0x9F344834752cb3a8C54c3DdCd41Da4042b10D0b9",
+	},
 	gasPrice: null,
 	gasLimit: null,
 });

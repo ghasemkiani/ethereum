@@ -26,6 +26,21 @@ class Account extends cutil.mixin(Base, iwutil, iwscan) {
 		this.address = Web3.utils.toChecksumAddress(this.address);
 		return this;
 	}
+	get balances_() {
+		if(!this._balances_) {
+			this._balances_ = {};
+		}
+		return this._balances_;
+	}
+	set balances_(balances_) {
+		this._balances_ = balances_;
+	}
+	get balance_() {
+		return this.balances_[this.util.tok];
+	}
+	set balance_(balance_) {
+		this.balances_[this.util.tok] = balance_;
+	}
 	get balances() {
 		if(!this._balances) {
 			this._balances = {};
@@ -41,12 +56,33 @@ class Account extends cutil.mixin(Base, iwutil, iwscan) {
 	set balance(balance) {
 		this.balances[this.util.tok] = balance;
 	}
+	async toGetBalance_() {
+		let walletAddress = this.address;
+		let balance_ = await this.util.toGetBalance_(walletAddress);
+		this.balance_ = balance_;
+		return balance_;
+	}
 	async toGetBalance() {
 		let web3 = this.util.web3;
 		let walletAddress = this.address;
 		let balance = await this.util.toGetBalance(walletAddress);
 		this.balance = balance;
 		return balance;
+	}
+	async toGetTokenBalance_(token) {
+		if(token === this.util.tok) {
+			return await this.toGetBalance_();
+		} else {
+			let web3 = this.util.web3;
+			let walletAddress = this.address;
+			let tokenAddress = this.util.contracts[token];
+			if(!tokenAddress) {
+				throw new Error(`Token '${token}' not found (contract address not defined)`);
+			}
+			let balance_ = await this.util.toGetTokenBalanace_(walletAddress, tokenAddress);
+			this.balances_[token] = balance_;
+			return balance_;
+		}
 	}
 	async toGetTokenBalance(token) {
 		if(token === this.util.tok) {
@@ -102,6 +138,7 @@ cutil.extend(Account.prototype, {
 	_address: null,
 	key: null,
 	_balances: null,
+	_balances_: null,
 });
 
 module.exports = {Account};

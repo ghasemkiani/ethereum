@@ -44,10 +44,10 @@ class Util extends Base {
 	}
 	fromWei(value) {
 		let amount = Web3.utils.fromWei(cutil.asString(value), "ether");
-		return amount;
+		return cutil.asNumber(amount);
 	}
 	toWei(amount) {
-		let value = Web3.utils.toWei(cutil.asString(amount), "ether");
+		let value = Web3.utils.toWei(cutil.asNumber(amount), "ether");
 		return value;
 	}
 	async toGetBlockNumber() {
@@ -72,10 +72,17 @@ class Util extends Base {
 		let blockTimeSec = (cutil.asNumber(timestamp1) - cutil.asNumber(timestamp0)) / N;
 		return blockTimeSec;
 	}
+	async toGetBalance_(walletAddress) {
+		let util = this;
+		let {web3} = util;
+		let balance_ = await web3.eth.getBalance(walletAddress);
+		return balance_;
+	}
 	async toGetBalance(walletAddress) {
-		let web3 = this.web3;
-		let balance = await web3.eth.getBalance(walletAddress);
-		balance = BigNumber(balance).times(BigNumber(10).pow(-18)).toNumber();
+		let util = this;
+		let {web3} = util;
+		let balance_ = await util.toGetBalance_(walletAddress);
+		let balance = util.fromWei(balance_);
 		return balance;
 	}
 	async toGetTokenBalanace_(walletAddress, tokenAddress) {
@@ -159,6 +166,7 @@ cutil.extend(Util.prototype, {
 	tok: "ETH",
 	DEFAULT_URL: null,
 	NODE_KEY: "ETH_NODE",
+	SOLIDITY_MAXINT: (2n ** 256n - 1n).toString(),
 	_url: null,
 	contracts: {
 		"WETH": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",

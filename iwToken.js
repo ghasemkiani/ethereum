@@ -6,7 +6,11 @@ const iwToken = {
 	Token,
 	token(...args) {
 		let Token = this.Token;
-		return new Token(...args);
+		let token = new Token(...args);
+		if (this.account) {
+			token.account = this.account;
+		}
+		return token;
 	},
 }
 

@@ -12,4 +12,4 @@ const iwdefi = {
 	},
 };
 
-module.exports = {iwdefi};
+export {iwdefi};

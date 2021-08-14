@@ -1,14 +1,14 @@
 //	@ghasemkiani/ethereum/defi
 
-const {cutil} = require("@ghasemkiani/base/cutil");
-const {Obj: Base} = require("@ghasemkiani/base/obj");
-const {iwutil} = require("@ghasemkiani/ethereum/iwutil");
-const {util: utilEth} = require("@ghasemkiani/ethereum/util");
-const {Client} = require("@ghasemkiani/etherscan-api/client");
-const {iwscan} = require("@ghasemkiani/ethereum/iwscan");
-const {iwToken: iwTokenEth} = require("@ghasemkiani/ethereum/iwToken");
+import {cutil} from "@ghasemkiani/base";
+import {Obj} from "@ghasemkiani/base";
+import {Client} from "@ghasemkiani/etherscan-api";
+import {iwutil} from "./iwutil.js";
+import {util as utilEth} from "./util.js";
+import {iwscan} from "./iwscan.js";
+import {iwToken as iwTokenEth} from "./iwToken.js";
 
-class DeFi extends cutil.mixin(Base, iwutil, iwscan, iwTokenEth) {
+class DeFi extends cutil.mixin(Obj, iwutil, iwscan, iwTokenEth) {
 	
 }
 cutil.extend(DeFi.prototype, {
@@ -17,4 +17,4 @@ cutil.extend(DeFi.prototype, {
 	account: null,
 });
 
-module.exports = {DeFi};
+export {DeFi};

@@ -21,4 +21,4 @@ const iwscan = {
 	},
 };
 
-module.exports = {iwscan};
+export {iwscan};

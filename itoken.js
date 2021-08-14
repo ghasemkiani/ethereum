@@ -1,9 +1,9 @@
 //	@ghasemkiani/ethereum/itoken
 
-const {BigNumber} = require("bignumber.js");
+import BigNumber from "bignumber.js";
 
-const {cutil} = require("@ghasemkiani/base/cutil");
-const {abi: abiErc20} = require("@ghasemkiani/ethereum/erc20");
+import {cutil} from "@ghasemkiani/base";
+import {abi as abiERC20} from "./erc20.js";
 
 const itoken = {
 	id: null,
@@ -166,4 +166,4 @@ const itoken = {
 	},
 }
 
-module.exports = {itoken};
+export {itoken};

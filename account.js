@@ -1,16 +1,16 @@
 //	@ghasemkiani/ethereum/account
 
-const Web3 = require("web3");
-const BigNumber = require("bignumber.js");
+import Web3 from "web3";
+import BigNumber from "bignumber.js";
 
-const {cutil} = require("@ghasemkiani/base/cutil");
-const {Obj: Base} = require("@ghasemkiani/base/obj");
-const {iwutil} = require("@ghasemkiani/ethereum/iwutil");
-const {util: utilEth} = require("@ghasemkiani/ethereum/util");
-const {Client} = require("@ghasemkiani/etherscan-api/client");
-const {iwscan} = require("@ghasemkiani/ethereum/iwscan");
+import {cutil} from "@ghasemkiani/base";
+import {Obj} from "@ghasemkiani/base";
+import {Client} from "@ghasemkiani/etherscan-api";
+import {iwutil} from "./iwutil.js";
+import {util as utilEth} from "./util.js";
+import {iwscan} from "./iwscan.js";
 
-class Account extends cutil.mixin(Base, iwutil, iwscan) {
+class Account extends cutil.mixin(Obj, iwutil, iwscan) {
 	get address() {
 		if(!this._address && this.key) {
 			let web3 = this.util.web3;
@@ -141,4 +141,4 @@ cutil.extend(Account.prototype, {
 	_balances_: null,
 });
 
-module.exports = {Account};
+export {Account};

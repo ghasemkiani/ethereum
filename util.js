@@ -1,13 +1,13 @@
 //	@ghasemkiani/ethereum/util
 
-const Web3 = require("web3");
-const BigNumber = require("bignumber.js");
+import Web3 from "web3";
+import BigNumber from "bignumber.js";
 
-const {cutil} = require("@ghasemkiani/base/cutil");
-const {Obj: Base} = require("@ghasemkiani/base/obj");
-const {abi: abiERC20} = require("@ghasemkiani/ethereum/erc20");
+import {cutil} from "@ghasemkiani/base";
+import {Obj} from "@ghasemkiani/base";
+import {abi as abiERC20} from "./erc20.js";
 
-class Util extends Base {
+class Util extends Obj {
 	get url() {
 		if(!this._url) {
 			this._url = process.env[this.NODE_KEY] || this.DEFAULT_URL;
@@ -403,4 +403,4 @@ cutil.extend(Util.prototype, {
 
 const util = new Util();
 
-module.exports = {Util, util};
+export {Util, util};

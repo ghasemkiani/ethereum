@@ -1,6 +1,6 @@
 //	@ghasemkiani/ethereum/iwToken
 
-const {Token} = require("@ghasemkiani/ethereum/token");
+import {Token} from "./token.js";
 
 const iwToken = {
 	Token,
@@ -14,4 +14,4 @@ const iwToken = {
 	},
 }
 
-module.exports = {iwToken};
+export {iwToken};

@@ -1,9 +1,9 @@
 //	@ghasemkiani/ethereum/token
 
-const {cutil} = require("@ghasemkiani/base/cutil");
-const {Contract} = require("@ghasemkiani/ethereum/contract");
-const {itoken} = require("@ghasemkiani/ethereum/itoken");
+import {cutil} from "@ghasemkiani/base";
+import {Contract} from "./contract.js";
+import {itoken} from "./itoken.js";
 
 class Token extends cutil.mixin(Contract, itoken) {}
 
-module.exports = {Token};
+export {Token};

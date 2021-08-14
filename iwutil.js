@@ -14,4 +14,4 @@ const iwutil = {
 	},
 };
 
-module.exports = {iwutil};
+export {iwutil};

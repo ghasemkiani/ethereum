@@ -1,9 +1,9 @@
 //	@ghasemkiani/ethereum/contract
 
-const {cutil} = require("@ghasemkiani/base/cutil");
-const {Account} = require("@ghasemkiani/ethereum/account");
-const {icontract} = require("@ghasemkiani/ethereum/icontract");
+import {cutil} from "@ghasemkiani/base";
+import {Account} from "./account.js";
+import {icontract} from "./icontract.js";
 
 class Contract extends cutil.mixin(Account, icontract) {}
 
-module.exports = {Contract};
+export {Contract};

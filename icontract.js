@@ -1,6 +1,6 @@
 //	@ghasemkiani/ethereum/icontract
 
-const {cutil} = require("@ghasemkiani/base/cutil");
+import {cutil} from "@ghasemkiani/base";
 
 const icontract = {
 	abi: null,
@@ -63,4 +63,4 @@ const icontract = {
 	},
 };
 
-module.exports = {icontract};
+export {icontract};

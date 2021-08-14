@@ -1,7 +1,8 @@
 {
   "name": "@ghasemkiani/ethereum",
-  "version": "1.12.4",
+  "version": "2.0.0",
   "description": "Ethereum blockchain utility",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

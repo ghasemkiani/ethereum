@@ -28,7 +28,7 @@ const itoken = {
 			await this.toGetAbi();
 		} catch(e) {
 			if (this.fallbackToErc20Abi) {
-				this.abi = JSON.parse(JSON.stringify(abiErc20));
+				this.abi = JSON.parse(JSON.stringify(abiERC20));
 			} else {
 				throw e;
 			}

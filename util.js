@@ -19,7 +19,7 @@ class Util extends Obj {
 	}
 	get web3() {
 		if(!this._web3) {
-			this._web3 = new Web3(this.url || Web3.givenProvider);
+			this._web3 = new Web3(this.url || this.provider || Web3.givenProvider);
 		}
 		return this._web3;
 	}
@@ -163,6 +163,7 @@ class Util extends Obj {
 	}
 }
 cutil.extend(Util.prototype, {
+	provider: null,
 	tok: "ETH",
 	DEFAULT_URL: null,
 	NODE_KEY: "ETH_NODE",

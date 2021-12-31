@@ -8,7 +8,7 @@ const iwContract = {
 		let Contract = this.Contract;
 		let contract = new Contract(...args);
 		if (this.account) {
-			token.account = this.account;
+			contract.account = this.account;
 		}
 		return contract;
 	},

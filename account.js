@@ -99,14 +99,14 @@ class Account extends cutil.mixin(Obj, iwutil, iwscan) {
 			return balance;
 		}
 	}
-	async toTransfer({amount, toAddress}) {
+	async toTransfer({amount_, amount, toAddress}) {
 		let web3 = this.util.web3;
 		let privateKey = this.key;
-		return await this.util.toTransfer({amount, toAddress, privateKey});
+		return await this.util.toTransfer({amount_, amount, toAddress, privateKey});
 	}
-	async toTransferToken({amount, token, toAddress}) {
+	async toTransferToken({amount_, amount, token, toAddress}) {
 		if(token === this.util.tok) {
-			return await this.toTransfer({amount, toAddress});
+			return await this.toTransfer({amount_, amount, toAddress});
 		} else {
 			let web3 = this.util.web3;
 			let privateKey = this.key;
@@ -114,7 +114,7 @@ class Account extends cutil.mixin(Obj, iwutil, iwscan) {
 			if(!tokenAddress) {
 				throw new Error(`Token '${token}' not found (contract address not defined)`);
 			}
-			return await this.util.toTransferToken({amount, tokenAddress, toAddress, privateKey});
+			return await this.util.toTransferToken({amount_, amount, tokenAddress, toAddress, privateKey});
 		}
 	}
 	async toSignTransaction(options) {

@@ -107,27 +107,28 @@ class Util extends Obj {
 		let fee = gasPrice * gas;
 		return {gas, gasPrice, fee};
 	}
-	async toTransfer({amount, toAddress, privateKey}) {
+	async toTransfer({amount_, amount, toAddress, privateKey}) {
 		let web3 = this.web3;
 		if(cutil.isNil(this.gasPrice)) {
 			await this.toGetGasPrice();
 		}
 		let gasPrice = this.gasPrice;
 		let gas = await this.toGetGasLimit();
-		let value = Web3.utils.toWei(cutil.asString(amount), "ether");
+		let value = cutil.isNil(amount_) ? Web3.utils.toWei(cutil.asString(amount), "ether") : amount_;
 		let to = toAddress;
 		let options = {to, value, gas, gasPrice};
 		let signed = await web3.eth.accounts.signTransaction(options, privateKey);
 		let receipt = await web3.eth.sendSignedTransaction(signed.rawTransaction);
 		return receipt;
 	}
-	async toTransferToken({amount, tokenAddress, toAddress, privateKey}) {
+	async toTransferToken({amount_, amount, tokenAddress, toAddress, privateKey}) {
 		let web3 = this.web3;
-		let abi = abiERC20;
-		let contract = new web3.eth.Contract(abi, tokenAddress);
-		let decimals = await (contract.methods.decimals()).call();
-		amount = BigNumber(amount).times(BigNumber(10).pow(decimals)).toString();
-		let data = contract.methods.transfer(toAddress, amount).encodeABI();
+		let contract = new web3.eth.Contract(abiERC20, tokenAddress);
+		if (cutil.isNil(amount_)) {
+			let decimals = await (contract.methods.decimals()).call();
+			amount_ = BigNumber(amount).times(BigNumber(10).pow(decimals)).toString();
+		}
+		let data = contract.methods.transfer(toAddress, amount_).encodeABI();
 		let value = 0; // ETH
 		let to = tokenAddress;
 		if(cutil.isNil(this.gasPrice)) {

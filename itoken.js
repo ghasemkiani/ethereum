@@ -38,6 +38,19 @@ const itoken = {
 		await this.toGetDecimals();
 		return this;
 	},
+	async toUpdateDecimals() {
+		try {
+			await this.toGetAbi();
+		} catch(e) {
+			if (this.fallbackToErc20Abi) {
+				this.abi = JSON.parse(JSON.stringify(abiERC20));
+			} else {
+				throw e;
+			}
+		}
+		await this.toGetDecimals();
+		return this;
+	},
 	async toGetSymbol() {
 		if(cutil.isNil(this.symbol)) {
 			this.symbol = await (this.contract.methods.symbol()).call();

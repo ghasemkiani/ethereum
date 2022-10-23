@@ -402,6 +402,7 @@ cutil.extend(Util.prototype, {
 	tokenDecimals: {},
 	contractProxies: {
 		"0x9BE89D2a4cd102D8Fecc6BF9dA793be995C22541": "0x9F344834752cb3a8C54c3DdCd41Da4042b10D0b9",
+		"0x68749665FF8D2d112Fa859AA293F07A622782F38": "0xd131ef0Fc4Ae1Af2e1CA3641a8E542731E3B36B4",
 	},
 	gasPrice: null,
 	gasLimit: null,

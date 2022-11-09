@@ -14,3 +14,4 @@ export * from "./iwAccount.js";
 export * from "./iwContract.js";
 export * from "./iwToken.js";
 export * from "./defi.js";
+export * from "./ichain.js";

@@ -37,10 +37,10 @@ const icontract = {
 	async toEstimateGas(data) {
 		let from = this.account.address;
 		let to = this.address;
-		let gas = await this.util.web3.eth.estimateGas({from, to, data});
-		gas = d(gas).mul(this.util.gasK).toFixed(0);
-		gas = cutil.asInteger(gas);
-		return gas;
+		let gasLimit = await this.util.web3.eth.estimateGas({from, to, data});
+		gasLimit = d(gasLimit).mul(this.util.gasLimitK).toFixed(0);
+		gasLimit = cutil.asInteger(gasLimit);
+		return gasLimit;
 	},
 	async toSendData(data, value = 0) {
 		let to = this.address;

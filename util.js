@@ -1,7 +1,8 @@
 //	@ghasemkiani/ethereum/util
 
 import Web3 from "web3";
-import BigNumber from "bignumber.js";
+import bn from "bignumber.js";
+import d from "decimal.js";
 
 import {cutil} from "@ghasemkiani/base";
 import {Obj} from "@ghasemkiani/base";
@@ -29,6 +30,8 @@ class Util extends Obj {
 	async toGetGasPrice() {
 		let web3 = this.web3;
 		let gasPrice = await web3.eth.getGasPrice();
+		gasPrice = d(gasPrice).mul(this.gasPriceK).toFixed(0);
+		gasPrice = cutil.asInteger(gasPrice);
 		this.gasPrice = gasPrice;
 		return gasPrice;
 	}
@@ -36,6 +39,8 @@ class Util extends Obj {
 		let web3 = this.web3;
 		let gasLimit = (await web3.eth.getBlock("latest")).gasLimit;
 		gasLimit = cutil.asNumber(gasLimit);
+		gasLimit = d(gasLimit).mul(this.gasLimitK).toFixed(0);
+		gasLimit = cutil.asInteger(gasLimit);
 		if(gasLimit > this.gasLimitMax) {
 			gasLimit = this.gasLimitMax;
 		}
@@ -98,7 +103,7 @@ class Util extends Obj {
 		let contract = new web3.eth.Contract(abi, tokenAddress);
 		let decimals = await (contract.methods.decimals()).call();
 		let balance_ = await this.toGetTokenBalanace_(walletAddress, tokenAddress);
-		let balance = BigNumber(balance_).times(BigNumber(10).pow(-decimals)).toNumber();
+		let balance = bn(balance_).times(bn(10).pow(-decimals)).toNumber();
 		return balance;
 	}
 	async toGetTransactionFee() {
@@ -126,7 +131,7 @@ class Util extends Obj {
 		let contract = new web3.eth.Contract(abiERC20, tokenAddress);
 		if (cutil.isNil(amount_)) {
 			let decimals = await (contract.methods.decimals()).call();
-			amount_ = BigNumber(amount).times(BigNumber(10).pow(decimals)).toString();
+			amount_ = bn(amount).times(bn(10).pow(decimals)).toString();
 		}
 		let data = contract.methods.transfer(toAddress, amount_).encodeABI();
 		let value = 0; // ETH
@@ -407,7 +412,8 @@ cutil.extend(Util.prototype, {
 	gasPrice: null,
 	gasLimit: null,
 	gasLimitMax: 500000,
-	gasK: 1,
+	gasLimitK: 1,
+	gasPriceK: 1,
 });
 
 const util = new Util();

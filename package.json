@@ -1,6 +1,6 @@
 {
 	"name": "@ghasemkiani/ethereum",
-	"version": "2.3.8",
+	"version": "2.3.9",
 	"description": "Ethereum blockchain utility",
 	"type": "module",
 	"main": "index.js",
@@ -28,6 +28,7 @@
 		"@ghasemkiani/base": "github:ghasemkiani/base",
 		"@ghasemkiani/etherscan-api": "github:ghasemkiani/etherscan-api",
 		"bignumber.js": "^9.0.2",
+		"decimal.js": "^10.4.2",
 		"web3": "^1.7.3"
 	}
 }

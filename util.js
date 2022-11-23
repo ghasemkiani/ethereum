@@ -36,8 +36,8 @@ class Util extends Obj {
 		let web3 = this.web3;
 		let gasLimit = (await web3.eth.getBlock("latest")).gasLimit;
 		gasLimit = cutil.asNumber(gasLimit);
-		if(gasLimit > 500000) {
-			gasLimit = 500000;
+		if(gasLimit > this.gasLimitMax) {
+			gasLimit = this.gasLimitMax;
 		}
 		this.gasLimit = gasLimit;
 		return gasLimit;
@@ -406,6 +406,8 @@ cutil.extend(Util.prototype, {
 	},
 	gasPrice: null,
 	gasLimit: null,
+	gasLimitMax: 500000,
+	gasK: 1,
 });
 
 const util = new Util();

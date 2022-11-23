@@ -1,5 +1,7 @@
 //	@ghasemkiani/ethereum/icontract
 
+import d from "decimal.js";
+
 import {cutil} from "@ghasemkiani/base";
 
 const icontract = {
@@ -32,6 +34,15 @@ const icontract = {
 		this._contract = contract;
 	},
 	account: null,
+	async toEstimateGas(data) {
+		let {web3} = this.util;
+		let from = this.account.address;
+		let to = this.address;
+		let gas = await web3.eth.estimateGas({from, to, data});
+		gas = d(gas).mul(this.util.gasK).toFixed(0);
+		gas = cutil.asInteger(gas);
+		return gas;
+	},
 	async toSendData(data, value = 0) {
 		let to = this.address;
 		if(cutil.isNil(this.util.gasPrice)) {

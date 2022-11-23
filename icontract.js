@@ -35,10 +35,9 @@ const icontract = {
 	},
 	account: null,
 	async toEstimateGas(data) {
-		let {web3} = this.util;
 		let from = this.account.address;
 		let to = this.address;
-		let gas = await web3.eth.estimateGas({from, to, data});
+		let gas = await this.util.web3.eth.estimateGas({from, to, data});
 		gas = d(gas).mul(this.util.gasK).toFixed(0);
 		gas = cutil.asInteger(gas);
 		return gas;
@@ -52,7 +51,8 @@ const icontract = {
 		if(cutil.isNil(this.util.gasLimit)) {
 			await this.util.toGetGasLimit();
 		}
-		let gas = this.util.gasLimit;
+		// let gas = this.util.gasLimit;
+		let gas = await this.toEstimateGas(data);
 		console.log({to, value, gas, gasPrice, data});
 		let options = {to, value, gas, gasPrice, data};
 		let receipt = await this.account.toSend(options);

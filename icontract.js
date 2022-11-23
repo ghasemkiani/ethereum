@@ -35,27 +35,28 @@ const icontract = {
 	},
 	account: null,
 	async toEstimateGas(data) {
-		let from = this.account.address;
-		let to = this.address;
-		let gasLimit = await this.util.web3.eth.estimateGas({from, to, data});
-		gasLimit = d(gasLimit).mul(this.util.gasLimitK).toFixed(0);
+		let contract = this;
+		let {account} = contract;
+		let {util} = contract;
+		let {web3} = util;
+		let from = account.address;
+		let to = contract.address;
+		let gasLimit = await web3.eth.estimateGas({from, to, data});
+		gasLimit = d(gasLimit).mul(util.gasLimitK).toFixed(0);
 		gasLimit = cutil.asInteger(gasLimit);
 		return gasLimit;
 	},
 	async toSendData(data, value = 0) {
-		let to = this.address;
-		if(cutil.isNil(this.util.gasPrice)) {
-			await this.util.toGetGasPrice();
-		}
-		let gasPrice = this.util.gasPrice;
-		if(cutil.isNil(this.util.gasLimit)) {
-			await this.util.toGetGasLimit();
-		}
-		// let gas = this.util.gasLimit;
-		let gas = await this.toEstimateGas(data);
-		console.log({to, value, gas, gasPrice, data});
+		let contract = this;
+		let {account} = contract;
+		let {util} = contract;
+		let {web3} = util;
+		let to = contract.address;
+		let gasPrice = await util.toGetGasPrice();
+		let gas = await contract.toEstimateGas(data);
 		let options = {to, value, gas, gasPrice, data};
-		let receipt = await this.account.toSend(options);
+		console.log(options);
+		let receipt = await account.toSend(options);
 		return receipt;
 	},
 	findFunction(nm, index = 0) {

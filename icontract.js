@@ -47,6 +47,26 @@ const icontract = {
 		let receipt = await this.account.toSend(options);
 		return receipt;
 	},
+	findFunction(nm, index = 0) {
+		let {abi} = this;
+		let items = abi.filter(({type, name}) => type === "function" && name === nm);
+		return items[index];
+	},
+	findEvent(nm, index = 0) {
+		let {abi} = this;
+		let items = abi.filter(({type, name}) => type === "event" && name === nm);
+		return items[index];
+	},
+	functionData(func, ...rest) {
+		let {web3} = this.util;
+		let data = web3.eth.abi.encodeFunctionCall(func, rest);
+		return data;
+	},
+	callData(nm, ...rest) {
+		let func = this.findFunction(nm);
+		let data = this.functionData(func, ...rest);
+		return data;
+	},
 	async toCallRead(method, ...rest) {
 		let result = await this.contract.methods[method](...rest).call();
 		return result;

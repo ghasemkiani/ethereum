@@ -9,6 +9,15 @@ import {Obj} from "@ghasemkiani/base";
 import {abi as abiERC20} from "./erc20.js";
 
 class Util extends Obj {
+	get wtok() {
+		if (!this._wtok) {
+			this._wtok = "W" + this.tok;
+		}
+		return this._wtok;
+	}
+	set wtok(wtok) {
+		this._wtok = wtok;
+	}
 	get url() {
 		if(!this._url) {
 			this._url = process.env[this.NODE_KEY] || this.DEFAULT_URL;
@@ -171,10 +180,12 @@ class Util extends Obj {
 cutil.extend(Util.prototype, {
 	provider: null,
 	tok: "ETH",
+	_wtok: null,
 	DEFAULT_URL: null,
 	NODE_KEY: "ETH_NODE",
 	SOLIDITY_MAXINT: (2n ** 256n - 1n).toString(),
 	_url: null,
+	addressZero: "0x0000000000000000000000000000000000000000",
 	contracts: {
 		"WETH": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
 		"WBTC": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",

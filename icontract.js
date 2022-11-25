@@ -41,10 +41,10 @@ const icontract = {
 		let {web3} = util;
 		let from = account.address;
 		let to = contract.address;
-		let gasLimit = await web3.eth.estimateGas({from, to, data});
-		gasLimit = d(gasLimit).mul(util.gasLimitK).toFixed(0);
-		gasLimit = cutil.asInteger(gasLimit);
-		return gasLimit;
+		let gas = await web3.eth.estimateGas({from, to, data});
+		gas = d(gas).mul(util.gasLimitK).toFixed(0);
+		gas = cutil.asInteger(gas);
+		return gas;
 	},
 	async toSendData(data, value = 0) {
 		let contract = this;
@@ -53,7 +53,12 @@ const icontract = {
 		let {web3} = util;
 		let to = contract.address;
 		let gasPrice = await util.toGetGasPrice();
-		let gas = await contract.toEstimateGas(data);
+		let gas;
+		try {
+			gas = await contract.toEstimateGas(data);
+		} catch(e) {
+			gas = util.gasLimitMax;
+		}
 		let options = {to, value, gas, gasPrice, data};
 		console.log(options);
 		let receipt = await account.toSend(options);

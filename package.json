@@ -1,6 +1,6 @@
 {
 	"name": "@ghasemkiani/ethereum",
-	"version": "2.3.12",
+	"version": "2.3.13",
 	"description": "Ethereum blockchain utility",
 	"type": "module",
 	"main": "index.js",

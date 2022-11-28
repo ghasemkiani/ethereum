@@ -27,6 +27,9 @@ class Util extends Obj {
 	set addressWTok(addressWTok) {
 		this._addressWTok = addressWTok;
 	}
+	isWTok(token) {
+		return this.eq(this.addressWTok, token) || this.eq(this.addressWTok, token?.address);
+	}
 	get url() {
 		if(!this._url) {
 			this._url = process.env[this.NODE_KEY] || this.DEFAULT_URL;

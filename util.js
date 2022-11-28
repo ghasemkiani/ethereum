@@ -18,6 +18,15 @@ class Util extends Obj {
 	set wtok(wtok) {
 		this._wtok = wtok;
 	}
+	get addressWTok() {
+		if (!this._addressWTok) {
+			this._addressWTok = this.tokenAddress(this.wtok);
+		}
+		return this._addressWTok;
+	}
+	set addressWTok(addressWTok) {
+		this._addressWTok = addressWTok;
+	}
 	get url() {
 		if(!this._url) {
 			this._url = process.env[this.NODE_KEY] || this.DEFAULT_URL;
@@ -185,6 +194,7 @@ cutil.extend(Util.prototype, {
 	NODE_KEY: "ETH_NODE",
 	SOLIDITY_MAXINT: (2n ** 256n - 1n).toString(),
 	_url: null,
+	_addressWTok: null,
 	addressZero: "0x0000000000000000000000000000000000000000",
 	contracts: {
 		"WETH": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",

@@ -127,8 +127,26 @@ class Account extends cutil.mixin(Obj, iwutil, iwscan) {
 		return receipt;
 	}
 	async toSend(options) {
-		let signed = await this.toSignTransaction(options);
-		let receipt = await this.toSendSignedTransaction(signed.rawTransaction);
+		let {rawTransaction} = await this.toSignTransaction(options);
+		let receipt = await this.toSendSignedTransaction(rawTransaction);
+		return receipt;
+	}
+	async toDeploy(data) {
+		let account = this;
+		let {util} = account;
+		let {address} = account;
+		let {web3} = util;
+		let from = address;
+		let value = 0;
+		let gasPrice = await util.toGetGasPrice();
+		let gas;
+		try {
+			gas = await web3.eth.estimateGas({from, data});
+		} catch(e) {
+			gas = util.gasLimitMax;
+		}
+		let options = {value, gas, gasPrice, data};
+		let receipt = await account.toSend(options);
 		return receipt;
 	}
 }

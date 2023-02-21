@@ -66,12 +66,24 @@ const icontract = {
 	},
 	findFunction(nm, index = 0) {
 		let {abi} = this;
-		let items = abi.filter(({type, name}) => type === "function" && name === nm);
+		let types;
+		let result = /^([^(]+)\(([^)]*)\)$/.exec(nm);
+		if (result) {
+			nm = result[1];
+			types = result[2].split(",");
+		}
+		let items = abi.filter(({type, name, inputs}) => type === "function" && name === nm && (!types || (inputs.length === types.length && inputs.every(({type}, i) => type === types[i]))));
 		return items[index];
 	},
 	findEvent(nm, index = 0) {
 		let {abi} = this;
-		let items = abi.filter(({type, name}) => type === "event" && name === nm);
+		let types;
+		let result = /^([^(]+)\(([^)]*)\)$/.exec(nm);
+		if (result) {
+			nm = result[1];
+			types = result[2].split(",");
+		}
+		let items = abi.filter(({type, name, inputs}) => type === "event" && name === nm && (!types || (inputs.length === types.length && inputs.every(({type}, i) => type === types[i]))));
 		return items[index];
 	},
 	functionData(func, ...rest) {

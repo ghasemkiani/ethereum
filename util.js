@@ -41,7 +41,7 @@ class Util extends Obj {
 	}
 	get web3() {
 		if(!this._web3) {
-			this._web3 = new Web3(this.url || this.provider || Web3.givenProvider);
+			this._web3 = new Web3(this.provider || this.url || Web3.givenProvider);
 		}
 		return this._web3;
 	}
@@ -199,6 +199,8 @@ cutil.extend(Util.prototype, {
 	_url: null,
 	_addressWTok: null,
 	addressZero: "0x0000000000000000000000000000000000000000",
+	addressOne: "0x0000000000000000000000000000000000000001",
+	addressTwo: "0x0000000000000000000000000000000000000002",
 	contracts: {
 		"WETH": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
 		"WBTC": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
